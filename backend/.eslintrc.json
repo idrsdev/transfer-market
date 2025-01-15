@@ -1,0 +1,35 @@
+{
+    "root": true,
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "parser": "@typescript-eslint/parser", //include it inside .ts files overrides
+    "plugins": ["@typescript-eslint"], //include it inside .ts files overrides
+    "extends": [
+        "plugin:@typescript-eslint/recommended", //include it inside .ts files overrides
+        "plugin:prettier/recommended", //stops styling errors, handle them separately
+        "prettier"
+    ],
+    "rules": {},
+    // Overrides are helpful when project have both .js and .ts files
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"], // Your TypeScript files extension
+            "parser": "@typescript-eslint/parser",
+            "plugins": ["@typescript-eslint"],
+            "parserOptions": {
+                "sourceType": "module",
+                "tsconfigRootDir": "",
+                "project": ["./tsconfig.json"] // Specify it only for TypeScript files
+            },
+            // As mentioned in the comments, you should extend TypeScript plugins here,
+            // instead of extending them outside the `overrides`.
+            // If you don't want to extend any rules, you don't need an `extends` attribute.
+            "extends": [
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking"
+            ]
+        }
+    ]
+}

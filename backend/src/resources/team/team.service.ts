@@ -40,9 +40,20 @@ class TeamService {
 
             return { team, user };
         } catch (error) {
-            // The Mongoos Error need to be handle
-            // They likley cannnot be done with instance of
-            // It has to be manually checked!
+            // Write now, It throws duplicate error, If we want descriptive error.
+            // We could use some Mongoos Error handling library here
+            if (error && typeof error == 'object') {
+                if ((error as Record<string, unknown>).code === 11000) {
+                    const keyPattern = (
+                        error as Record<string, Record<string, unknown>>
+                    ).keyPattern;
+                    const message = `${Object.keys(keyPattern).at(
+                        0
+                    )} must be unique`;
+                    throw new Error(message);
+                }
+            }
+
             throw new Error('Unable to create team');
         }
     }
@@ -67,7 +78,6 @@ class TeamService {
                 team_id: teamId,
             });
 
-            // Organize players by position
             const organizedPlayers: { [key: string]: IPlayer[] } = {
                 Goalkeeper: [],
                 Defender: [],

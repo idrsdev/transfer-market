@@ -5,6 +5,7 @@ import validationMiddleware from '@/middleware/validation.middleware';
 import validate from '@/resources/user/user.validation';
 import UserService from '@/resources/user/user.service';
 import catchAsync from '@/utils/catchAsync';
+import authenticatedMiddleware from '@/middleware/authentication.middleware';
 
 class UserController implements Controller {
     public path = '/users' as const;
@@ -20,6 +21,11 @@ class UserController implements Controller {
             `${this.path}/login-or-signup`,
             catchAsync(validationMiddleware(validate.loginOrSignup)),
             catchAsync(this.loginOrSignup)
+        );
+        this.router.get(
+            `${this.path}/me`,
+            catchAsync(authenticatedMiddleware),
+            catchAsync(this.getCurrentUser)
         );
     }
 
@@ -39,6 +45,22 @@ class UserController implements Controller {
                 password
             );
             res.status(200).json(result);
+        } catch (error: unknown) {
+            next(new HttpException(400, (error as Error).message));
+        }
+    };
+
+    private getCurrentUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const user = req.user;
+            if (!user) {
+                throw new Error('User not found');
+            }
+            res.status(200).json({ user });
         } catch (error: unknown) {
             next(new HttpException(400, (error as Error).message));
         }

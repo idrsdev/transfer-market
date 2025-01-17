@@ -4,6 +4,7 @@ import HttpException from '@/utils/exceptions/http.exception';
 import transferModel from '../transfer/transfer.model';
 import { ITransfer } from '../transfer/transfer.interface';
 import userModel from '../user/user.model';
+import { ITeam } from '../team/team.interface';
 
 class PlayerService {
     private player = playerModel;
@@ -19,7 +20,7 @@ class PlayerService {
         max_price?: number,
         position?: string,
         is_listed = true
-    ): Promise<{ players: IPlayer[]; total: number; totalPages: number }> {
+    ): Promise<{ players: IPlayer[]; totalPages: number }> {
         try {
             const query: Record<string, unknown> = { is_listed };
 
@@ -44,9 +45,19 @@ class PlayerService {
             const players = await this.player
                 .find(query)
                 .skip((page - 1) * pageSize)
-                .limit(pageSize);
+                .limit(pageSize)
+                .populate('team_id');
 
-            return { players, total, totalPages };
+            return {
+                players: players.map((player) => {
+                    return {
+                        ...player.toObject(),
+                        team: player.team_id as unknown as ITeam,
+                        team_id: undefined,
+                    };
+                }),
+                totalPages,
+            };
         } catch (error) {
             throw new HttpException(400, 'Unable to get players');
         }
@@ -98,12 +109,7 @@ class PlayerService {
     ): Promise<{ player: IPlayer; transfer: ITransfer; new_balance: number }> {
         try {
             const player = await this.player.findById(id);
-
-            if (
-                !player ||
-                !player.is_listed ||
-                player.listing_price !== undefined
-            ) {
+            if (!player || !player.is_listed || !player.listing_price) {
                 throw new HttpException(404, 'Player not found or not listed');
             }
 
@@ -113,12 +119,11 @@ class PlayerService {
                 throw new HttpException(404, 'Buyer not found');
             }
 
-            if (buyer.team_id === player.team_id) {
+            if ((buyer.team_id as any)?.equals(player.team_id)) {
                 throw new HttpException(400, 'Already Bought/ Team Member');
             }
 
             const requiredBalance = player.listing_price * 0.95; // 95% of listing price
-            console.log({ requiredBalance });
 
             if (buyer.balance < requiredBalance) {
                 throw new HttpException(400, 'Insufficient balance');

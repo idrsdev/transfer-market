@@ -16,6 +16,22 @@ const TeamSchema = new Schema<ITeam, TeamModel, ITeamMethods>(
     },
     {
         timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        },
+        toObject: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        },
     }
 );
 

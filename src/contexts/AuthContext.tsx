@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    updateAuthState({ loading: true });
+    // updateAuthState({ loading: true });
     try {
       const { user } = await auth.loginOrSignup(email, password);
       updateAuthState({
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    updateAuthState({ loading: true });
+    // updateAuthState({ loading: true });
     try {
       const { user } = await auth.loginOrSignup(email, password);
       updateAuthState({

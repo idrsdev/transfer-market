@@ -1,8 +1,10 @@
 import { Document, Model, ObjectId } from 'mongoose';
+import { ITeam } from '@/resources/team/team.interface';
 
 interface IPlayer {
     name: string;
-    team_id: ObjectId;
+    team_id?: ObjectId;
+    team?: ITeam;
     position: 'Goalkeeper' | 'Defender' | 'Midfielder' | 'Forward';
     base_price: number;
     is_listed: boolean;

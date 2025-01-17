@@ -55,10 +55,10 @@ class PlayerController implements Controller {
                 team as string,
                 Number(min_price),
                 Number(max_price),
-                position as string,
+                position === 'all' ? undefined : (position as string),
                 is_listed == undefined ? true : is_listed === 'true' // Convert to boolean
             );
-            res.status(200).json({ players });
+            res.status(200).json(players);
         }
     );
 

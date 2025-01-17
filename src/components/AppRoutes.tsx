@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import TeamPage from "@/components/team/TeamPage";
 
 export default function AppRoutes() {
   const { loading, user, hasCompletedSetup } = useAuth();
@@ -46,6 +47,7 @@ export default function AppRoutes() {
 
         <Route element={<ProtectedLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/team" element={<TeamPage />} />
         </Route>
       </Routes>
     </Suspense>

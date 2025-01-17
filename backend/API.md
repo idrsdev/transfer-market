@@ -132,7 +132,6 @@ Query Parameters:
 Response:
 {
   players: Player[];
-  total: number;
   totalPages: number;
 }
 ```

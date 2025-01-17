@@ -16,6 +16,7 @@ export interface Player {
   id: string;
   name: string;
   team_id: string;
+  team?: Team;
   position: string;
   base_price: number;
   is_listed: boolean;

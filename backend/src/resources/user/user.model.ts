@@ -35,6 +35,22 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     {
         timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        },
+        toObject: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        },
     }
 );
 

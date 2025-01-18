@@ -1,0 +1,24 @@
+services:
+  frontend:
+    image: tf-frontend:latest
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api # Build-time variable
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    image: tf-backend:latest
+    container_name: backend
+    build: ./backend
+    ports:
+      - "${PORT:-5000}:5000"
+    env_file:
+      - ./backend/.env # Runtime environment variables
+    environment:
+      - NODE_ENV=production # Override specific variables
+    restart: unless-stopped

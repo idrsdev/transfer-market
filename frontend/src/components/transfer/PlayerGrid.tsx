@@ -87,7 +87,7 @@ export default function PlayerGrid({
             team={player.team?.name}
             position={player.position}
             price={player.listing_price || player.base_price}
-            isOwned={player.team_id === user?.team_id}
+            isOwned={player.team?.id === user?.team_id}
             isListed={player.is_listed}
             onBuy={() => onBuyPlayer(player.id)}
             onEdit={() => handleEdit(player)}

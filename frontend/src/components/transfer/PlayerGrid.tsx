@@ -13,6 +13,7 @@ import { useState } from "react";
 import ListPlayerDialog from "./ListPlayerDialog";
 import { useMarket } from "@/contexts/MarketContext";
 import { useTeam } from "@/contexts/TeamContext";
+import { Info } from "lucide-react";
 
 interface PlayerGridProps {
   players: Player[];
@@ -72,14 +73,19 @@ export default function PlayerGrid({
   if (players.length === 0) {
     return (
       <div className="w-full min-h-[400px] bg-gray-50 p-6 flex items-center justify-center">
-        <p className="text-muted-foreground">No players found</p>
+        <div className="flex items-center">
+          <Info className="mr-2 text-blue-500" /> {/* Icon with margin */}
+          <p className="text-blue-600 text-xl font-semibold">
+            No players found
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-[400px] bg-gray-50 p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
+    <div className="w-full min-h-[400px] bg-gray-50">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-6">
         {players.map((player) => (
           <PlayerCard
             key={player.id}
@@ -108,36 +114,41 @@ export default function PlayerGrid({
           // isEdit={selectedPlayer.is_listed}
         />
       )}
-
       <div className="flex justify-center mt-8">
         <Pagination>
-          <PaginationContent>
+          <PaginationContent className="flex items-center gap-1 sm:gap-2">
             <PaginationItem>
               <PaginationPrevious
                 onClick={() => onPageChange(currentPage - 1)}
-                className={
+                className={`h-8 sm:h-9 px-2 sm:px-3 ${
                   currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                }
+                }`}
               />
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <PaginationItem key={page}>
+              <PaginationItem key={page} className="hidden sm:block">
                 <PaginationLink
                   onClick={() => onPageChange(page)}
                   isActive={currentPage === page}
+                  className="h-8 sm:h-9 w-8 sm:w-9"
                 >
                   {page}
                 </PaginationLink>
               </PaginationItem>
             ))}
+            <PaginationItem className="sm:hidden">
+              <span className="px-2 text-sm">
+                {currentPage} / {totalPages}
+              </span>
+            </PaginationItem>
             <PaginationItem>
               <PaginationNext
                 onClick={() => onPageChange(currentPage + 1)}
-                className={
+                className={`h-8 sm:h-9 px-2 sm:px-3 ${
                   currentPage === totalPages
                     ? "pointer-events-none opacity-50"
                     : ""
-                }
+                }`}
               />
             </PaginationItem>
           </PaginationContent>

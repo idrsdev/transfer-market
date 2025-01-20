@@ -1,0 +1,55 @@
+@keyframes dot-blink {
+  0%, 20% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.initial-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f4f8; /* Light background for a clean look */
+  transition: opacity 0.4s, visibility 0.4s;
+}
+
+.initial-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-dots {
+  display: flex;
+  gap: 8px; /* Space between dots */
+}
+
+.loader-dot {
+  width: 16px; /* Size of each dot */
+  height: 16px;
+  border-radius: 50%;
+  background-color: #1f2937; /* Dark color for the dots */
+  animation: dot-blink 1.5s infinite ease-in-out;
+}
+
+.loader-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loader-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loader-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}

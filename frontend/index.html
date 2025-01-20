@@ -4,10 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Transfer Market</title>
+    <link rel="stylesheet" href="/loading.css" />
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Initial Loading Screen -->
+    <div id="initial-loader" class="initial-loader">
+      <div class="loader-dots">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
+    </div>
+
+    <script>
+      // Remove loader when app is ready
+      window.addEventListener("load", function () {
+        const loader = document.getElementById("initial-loader");
+        if (loader) {
+          // Small delay to ensure smooth transition
+          setTimeout(() => {
+            loader.classList.add("fade-out");
+            // Remove from DOM after animation
+            setTimeout(() => loader.remove(), 400);
+          }, 500);
+        }
+      });
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

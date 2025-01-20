@@ -75,10 +75,16 @@ export default function TeamPage() {
       </div>
 
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-5 mb-8">
-          <TabsTrigger value="all">All Players</TabsTrigger>
+        <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1 mb-8">
+          <TabsTrigger value="all" className="text-sm sm:text-base">
+            All
+          </TabsTrigger>
           {positions.map((pos) => (
-            <TabsTrigger key={pos} value={pos}>
+            <TabsTrigger
+              key={pos}
+              value={pos}
+              className="text-sm sm:text-base whitespace-nowrap"
+            >
               {pos}s
             </TabsTrigger>
           ))}

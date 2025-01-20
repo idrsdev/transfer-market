@@ -24,7 +24,6 @@ export default function Home() {
 
   const { refreshTeam } = useTeam();
 
-  // Refresh market on mount
   useEffect(() => {
     refreshMarket();
   }, []);
@@ -32,43 +31,50 @@ export default function Home() {
   const handleBuyPlayer = async (playerId: string) => {
     try {
       await buyPlayer(playerId);
-      await refreshTeam(); // Refresh team data after purchase
+      await refreshTeam();
     } catch (error) {
       console.error("Failed to buy player:", error);
     }
   };
 
-  if (loading) {
-    return <Loader fullScreen />;
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-screen items-center justify-center text-red-500">
-        Error: {error.message}
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      <TransferHeader budget={user?.balance || 0} />
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <TransferHeader budget={user?.balance || 0} />
 
-      <SearchFilters
-        filters={filters}
-        onFiltersChange={setFilters}
-        onReset={() => setFilters({})}
-      />
+        <div className="my-6">
+          <SearchFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            onReset={() => setFilters({})}
+          />
+        </div>
 
-      <PlayerGrid
-        players={players}
-        currentPage={filters.page || 1}
-        totalPages={totalPages}
-        onPageChange={(page) => setFilters({ ...filters, page })}
-        onBuyPlayer={handleBuyPlayer}
-        onListPlayer={listPlayer}
-        onUnlistPlayer={unlistPlayer}
-      />
+        <div className="relative">
+          {loading ? (
+            <div className="flex justify-center items-center min-h-[400px] bg-gray-50">
+              <Loader />
+            </div>
+          ) : error ? (
+            <div className="flex min-h-[400px] items-center justify-center text-red-500 bg-gray-50">
+              <div className="text-center">
+                <p className="text-lg font-semibold mb-2">Error occurred</p>
+                <p className="text-sm opacity-80">{error.message}</p>
+              </div>
+            </div>
+          ) : (
+            <PlayerGrid
+              players={players}
+              currentPage={filters.page || 1}
+              totalPages={totalPages}
+              onPageChange={(page) => setFilters({ ...filters, page })}
+              onBuyPlayer={handleBuyPlayer}
+              onListPlayer={listPlayer}
+              onUnlistPlayer={unlistPlayer}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
